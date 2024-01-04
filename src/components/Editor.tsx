@@ -8,11 +8,21 @@ import { Box } from '@mui/material';
 import axios from 'axios';
 // import Button from '@mui/material';
 import Button from '@mui/material/Button';
+import ShareDocument from './ShareDocument';
+
 
 
 const TextEditor = () => {
   const [content, setContent] = useState('');
   const { docId } = useParams();
+  const [bool,setbool]=useState(false);
+  const [tit,settit]=useState('')
+
+
+  // const handleUserSelect = (user: User) => {
+  //   // Handle user selection
+  //   console.log('Selected user:', user);
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,6 +30,20 @@ const TextEditor = () => {
         const url = `http://localhost:8000/documents/${docId}`;
         const response = await axios.get(url);
         setContent(response.data.content);
+        const userId=localStorage.getItem('userid')
+        // const Title=response.data.t
+        // console.log("title")
+        // console.log(tit)
+        // console.log(response.data.Title)
+        // const Title=response.data.Title
+        settit(response.data.Title)
+        console.log(tit)
+        // const isUserIdEqualCreatedBy = userId === response?.data?.createdBy;
+        const createdBy=response?.data?.createdBy
+        setbool(String(userId) === String(createdBy))
+        // console.log(userId);
+        // console.log(createdBy)
+        // console.log(bool)
       } catch (error) {
         console.log('Error fetching document:', error);
       }
@@ -73,7 +97,7 @@ const TextEditor = () => {
       bgcolor="#f0f0f0" // Set your desired background color
     >
 
-      <p>Title</p>
+      <p style={{ fontWeight: 'bold', color: 'black', fontSize: '22px' }}>{tit}</p>
       <Box
         width="70%" // Adjust the width as needed
         minHeight="500px"
@@ -110,8 +134,20 @@ const TextEditor = () => {
           <Button variant="contained" color="primary" onClick={handleUpdateDocument}>
         Update
       </Button>
+
+      
+       
+       {bool && <ShareDocument documentId={docId} />} 
+      
+      
     </Box>
+    
+     
   );
+
+
+
+  
 };
 
 export default TextEditor;

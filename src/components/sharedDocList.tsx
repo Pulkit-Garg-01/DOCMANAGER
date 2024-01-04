@@ -11,7 +11,7 @@ interface Document {
   // Add other properties as needed
 }
 
-const DocumentList: React.FC = () => {
+const SharedDocumentList: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
 //   const history = useHistory();
 
@@ -21,7 +21,7 @@ const userid=localStorage.getItem('userid')
       try {
         console.log(userid)
         console.log("sjhbxbuucuc")
-        const response = await axios.get<Document[]>(`http://localhost:8000/documents/created/?createdBy=${userid}`);
+        const response = await axios.get<Document[]>(`http://localhost:8000/documents/shared/?userId=${userid}`);
 
         setDocuments(response.data);
       } catch (error) {
@@ -41,7 +41,7 @@ const userid=localStorage.getItem('userid')
 
   return (
     <div>
-      <h2>Your Documents</h2>
+      <h2>Shared Documents</h2>
       {documents.map((document) => (
         <Button
           key={document.id}
@@ -55,4 +55,4 @@ const userid=localStorage.getItem('userid')
   );
 };
 
-export default DocumentList;
+export default SharedDocumentList;
